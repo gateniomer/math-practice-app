@@ -37,8 +37,8 @@ class Calculator extends Component{
     return(
       <>
       <h1>Math Practice</h1>
-      <h1>{this.state.values}</h1>
       <h2>{this.state.num1} {this.state.sign} {this.state.num2} = </h2>
+      <h1 className="mp-input-heading">{this.state.values}</h1>
       <ButtonPad onClickHandler={this.onClickHandler}/>
       <h1>History:</h1>
       {/* <List values={}/> */}
