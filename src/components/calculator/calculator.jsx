@@ -62,7 +62,7 @@ class Calculator extends Component{
         <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
         <ButtonPad onClickHandler={this.onClickHandler}/>
         <h2>History:</h2>
-        {this.state.history.map(item=><h3>{item}</h3>)}
+        {this.state.history.map((item,acc) => <h3 key={item}>[{acc+1}] {item}</h3>)}
         </>
         :<Button className="start" value="start" onClickHandler={this.onStartHandler}/>}
 
