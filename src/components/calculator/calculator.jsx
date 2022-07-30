@@ -13,7 +13,8 @@ class Calculator extends Component{
       input:0,
       acc:100,
       started:false,
-      history:[]
+      history:[],
+      numOfTries:0
     }
   }
 
@@ -25,6 +26,7 @@ class Calculator extends Component{
       num2,
       answer:num1+num2,
       input:0,
+      numOfTries:0,
       ...additionalDetails
     })  }
   
@@ -32,14 +34,20 @@ class Calculator extends Component{
   onClickHandler = (e,key) => {
     switch(key){
       case 'ok':
+        //If succeeded
         if(this.state.input === this.state.answer){
           console.log('winner!')
           this.newExercise('+',{
-            history:[`${this.state.num1} + ${this.state.num2} = ${this.state.answer}`
+            history:[
+              {
+                exercise: `${this.state.num1} + ${this.state.num2} = ${this.state.answer}`,
+                numOfTries:this.state.numOfTries + 1
+            }
             ,...this.state.history]
           });
         }else{
           console.log('try again!');
+          this.setState({numOfTries:this.state.numOfTries+1})
         }
         break;
       case 'del':
@@ -62,7 +70,7 @@ class Calculator extends Component{
         <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
         <ButtonPad onClickHandler={this.onClickHandler}/>
         <h2>History:</h2>
-        {this.state.history.map((item,acc) => <h3 key={item}>[{acc+1}] {item}</h3>)}
+        {this.state.history.map((item,acc) => <h3 key={item.exercise}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
         </>
         :<Button className="start" value="start" onClickHandler={this.onStartHandler}/>}
 
