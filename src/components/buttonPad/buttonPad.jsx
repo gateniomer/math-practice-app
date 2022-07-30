@@ -1,17 +1,17 @@
 import { Component } from "react";
 import Button from "../button/button";
+import {Keys} from '../../utils/utils';
 
 class ButtonPad extends Component  {
   constructor(props){
     super(props);
-    this.keys = [0,1,2,3,4,5,6,7,8,9,"ok","del"];
   }
   render(){
     return (
       <div>
         <div className="grid">
         {
-          this.keys.map(key=><Button key={key} value={key} onClickHandler={this.props.onClickHandler}/>)
+          Keys.map(key=><Button key={key} value={key} onClickHandler={(e)=>this.props.onClickHandler(e,key)}/>)
         }
         </div>
       </div>
