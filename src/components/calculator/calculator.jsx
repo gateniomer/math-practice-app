@@ -72,7 +72,7 @@ class Calculator extends Component{
         <h2>History:</h2>
         {this.state.history.map((item,acc) => <h3 key={item.exercise}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
         </>
-        :<Button className="start" value="start" onClickHandler={this.onStartHandler}/>}
+        :<Button className="start-btn" value="start" onClickHandler={this.onStartHandler}/>}
 
     </>
     )
