@@ -23,3 +23,8 @@ export const MATH_OPERATIONS = {
     do: divide
   }
 }
+
+export const ALERTS = {
+  CORRECT:'CORRECT! 😍',
+  WRONG:'TRY AGAIN 🙃'
+}

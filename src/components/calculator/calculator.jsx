@@ -1,9 +1,10 @@
 import { Component } from "react";
 import ButtonPad from "../buttonPad/buttonPad";
 import Button from "../button/button";
-import { MATH_OPERATIONS } from "../../utils/utils";
+import { MATH_OPERATIONS,ALERTS } from "../../utils/utils";
 import MathOpetaionsBar from "../mathOpetaionsBar/mathOpetaionsBar.component";
 import AccumulatorBar from "../../accumulatorBar/accumulatorBar.component";
+import Alert from "../../alert/alert.component";
 
 class Calculator extends Component{
   constructor(props){
@@ -17,7 +18,11 @@ class Calculator extends Component{
       acc:10,
       started:false,
       history:[],
-      numOfTries:0
+      numOfTries:0,
+      alert: {
+        isActive:false,
+        message:''
+      }
     }
   }
 
@@ -50,22 +55,35 @@ class Calculator extends Component{
   onClickHandler = (e,key) => {
     switch(key){
       case 'ok':
-        //If succeeded
+        //answer is correct
         if(this.state.input === this.state.answer){
-          console.log('winner!')
           this.newExercise({
             history:[
               {
                 exercise: `${this.state.num1} ${this.state.mathOperation.sign} ${this.state.num2} = ${this.state.answer}`,
                 numOfTries:this.state.numOfTries + 1
             }
-            ,...this.state.history]
+            ,...this.state.history],
+            alert:{
+              isActive:true,
+              message:ALERTS.CORRECT
+            }
           });
-        }else{
-          console.log('try again!');
-          this.setState({numOfTries:this.state.numOfTries+1})
+          setTimeout(()=>this.setState({alert:false}),1500);
+        }
+        //answer is wrong
+        else{
+          this.setState({
+            numOfTries:this.state.numOfTries+1,
+            alert:{
+              isActive:true,
+              message:ALERTS.WRONG
+            }
+          })
+          setTimeout(()=>this.setState({alert:false}),1500);
         }
         break;
+
       case 'del':
         if(this.state.input===0){
           this.newExercise({});
@@ -73,6 +91,7 @@ class Calculator extends Component{
         }
         this.setState({input:Math.floor(this.state.input/10)});
         break;
+      
       default:
         this.setState({input:this.state.input*10 + parseInt(key)})
     }
@@ -86,6 +105,7 @@ class Calculator extends Component{
     {console.log('render',this.state.answer);}
     return(
       <>
+      {this.state.alert.isActive ? <Alert message={this.state.alert.message}/> : ''}
       <h1>Math Practice</h1>
       {this.state.started ? 
         <>
