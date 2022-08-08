@@ -3,6 +3,7 @@ import ButtonPad from "../buttonPad/buttonPad";
 import Button from "../button/button";
 import { MATH_OPERATIONS } from "../../utils/utils";
 import MathOpetaionsBar from "../mathOpetaionsBar/mathOpetaionsBar.component";
+import AccumulatorBar from "../../accumulatorBar/accumulatorBar.component";
 
 class Calculator extends Component{
   constructor(props){
@@ -25,11 +26,15 @@ class Calculator extends Component{
     const mathOperation = ('mathOperation' in additionalDetails) 
     ? additionalDetails.mathOperation
     : this.state.mathOperation;
-    
-    const num2 = Math.floor(Math.random()*this.state.acc + 1);
+
+    const acc = ('acc' in additionalDetails)
+    ? additionalDetails.acc
+    : this.state.acc;
+
+    const num2 = Math.floor(Math.random()*acc + 1);
     const num1 = (mathOperation.sign === MATH_OPERATIONS.divide.sign)
-    ? num2 * Math.floor(Math.random()*this.state.acc + 1)
-    : Math.floor(Math.random()*this.state.acc + 1);
+    ? num2 * Math.floor(Math.random()*acc + 1)
+    : Math.floor(Math.random()*acc + 1);
 
     this.setState({
       num1,
@@ -74,9 +79,8 @@ class Calculator extends Component{
   }
   onStartHandler = () => this.newExercise({started:true});
 
-  mathOpetaionsBarHandler = (operation) =>{
-    this.newExercise({mathOperation:operation});
-  }
+  mathOpetaionsBarHandler = (operation) => this.newExercise({mathOperation:operation});
+  accumulatorBarHandler = (acc) => this.newExercise({acc:acc});
   
   render(){
     {console.log('render',this.state.answer);}
@@ -85,8 +89,9 @@ class Calculator extends Component{
       <h1>Math Practice</h1>
       {this.state.started ? 
         <>
-        <h3>{this.state.num1} {this.state.mathOperation.sign} {this.state.num2} = ?</h3>
+        <h3>{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
         <MathOpetaionsBar callback={this.mathOpetaionsBarHandler}/>
+        <AccumulatorBar callback={this.accumulatorBarHandler}/>
         <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
         <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
         <h2>History:</h2>

@@ -48,3 +48,16 @@ h1,h2,h3{
   max-width: 400px;
   margin: 10px auto;
 }
+
+.start-btn{
+  display: block;
+  margin: auto;
+}
+
+.mathOpetaionsBar,
+.accumulatorBar{
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  margin: 10px 0;
+}
