@@ -1,6 +1,8 @@
 import { Component } from "react";
 import ButtonPad from "../buttonPad/buttonPad";
 import Button from "../button/button";
+import { MATH_OPERATIONS } from "../../utils/utils";
+import MathOpetaionsBar from "../mathOpetaionsBar/mathOpetaionsBar.component";
 
 class Calculator extends Component{
   constructor(props){
@@ -9,26 +11,35 @@ class Calculator extends Component{
       num1:0,
       num2:0,
       answer:0,
-      sign:'+',
+      mathOperation:MATH_OPERATIONS.sum,
       input:0,
-      acc:100,
+      acc:10,
       started:false,
       history:[],
       numOfTries:0
     }
   }
 
-  newExercise(sign,additionalDetails){
-    const num1 = Math.floor(Math.random()*this.state.acc + 1);
+  newExercise(additionalDetails){
+    //checks if we changed math operation before calling new exercise
+    const mathOperation = ('mathOperation' in additionalDetails) 
+    ? additionalDetails.mathOperation
+    : this.state.mathOperation;
+    
     const num2 = Math.floor(Math.random()*this.state.acc + 1);
+    const num1 = (mathOperation.sign === MATH_OPERATIONS.divide.sign)
+    ? num2 * Math.floor(Math.random()*this.state.acc + 1)
+    : Math.floor(Math.random()*this.state.acc + 1);
+
     this.setState({
       num1,
       num2,
-      answer:num1+num2,
+      answer:mathOperation.do(num1,num2),
       input:0,
       numOfTries:0,
       ...additionalDetails
-    })  }
+    }) 
+   }
   
   //buttonpad click handler
   onClickHandler = (e,key) => {
@@ -37,10 +48,10 @@ class Calculator extends Component{
         //If succeeded
         if(this.state.input === this.state.answer){
           console.log('winner!')
-          this.newExercise('+',{
+          this.newExercise({
             history:[
               {
-                exercise: `${this.state.num1} + ${this.state.num2} = ${this.state.answer}`,
+                exercise: `${this.state.num1} ${this.state.mathOperation.sign} ${this.state.num2} = ${this.state.answer}`,
                 numOfTries:this.state.numOfTries + 1
             }
             ,...this.state.history]
@@ -51,24 +62,33 @@ class Calculator extends Component{
         }
         break;
       case 'del':
+        if(this.state.input===0){
+          this.newExercise({});
+          break;
+        }
         this.setState({input:Math.floor(this.state.input/10)});
         break;
       default:
         this.setState({input:this.state.input*10 + parseInt(key)})
     }
   }
-  onStartHandler = () => this.newExercise('+',{started:true});
+  onStartHandler = () => this.newExercise({started:true});
+
+  mathOpetaionsBarHandler = (operation) =>{
+    this.newExercise({mathOperation:operation});
+  }
   
   render(){
-    {console.log('render',this.state.input);}
+    {console.log('render',this.state.answer);}
     return(
       <>
       <h1>Math Practice</h1>
       {this.state.started ? 
         <>
-        <h3>{this.state.num1} {this.state.sign} {this.state.num2} = ?</h3>
+        <h3>{this.state.num1} {this.state.mathOperation.sign} {this.state.num2} = ?</h3>
+        <MathOpetaionsBar callback={this.mathOpetaionsBarHandler}/>
         <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
-        <ButtonPad onClickHandler={this.onClickHandler}/>
+        <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
         <h2>History:</h2>
         {this.state.history.map((item,acc) => <h3 key={item.exercise}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
         </>
