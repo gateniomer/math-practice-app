@@ -24,8 +24,22 @@ class Calculator extends Component{
         message:''
       }
     }
+    
   }
 
+
+  componentDidMount(){
+    window.addEventListener('keydown',e=>{
+      if(isFinite(e.key) && e.code !== 'Space')
+        this.onNumberHandler(e.key);
+      if(e.key==='Backspace'){
+        this.onDelHandler();
+      }
+      if(e.key === 'Enter'){
+        this.onOkHandler();
+      }
+    });
+  }
   newExercise(additionalDetails){
     //checks if we changed math operation before calling new exercise
     const mathOperation = ('mathOperation' in additionalDetails) 
@@ -51,50 +65,59 @@ class Calculator extends Component{
     }) 
    }
   
+  onCorrectAnswer= ()=>{
+    this.newExercise({
+      history:[
+        {
+          exercise: `${this.state.num1} ${this.state.mathOperation.sign} ${this.state.num2} = ${this.state.answer}`,
+          numOfTries:this.state.numOfTries + 1
+      }
+      ,...this.state.history],
+      alert:{
+        isActive:true,
+        message:ALERTS.CORRECT
+      }
+    });
+    setTimeout(()=>this.setState({alert:false}),1500);
+  }
+  onWrongAnswer = ()=>{
+    this.setState({
+      numOfTries:this.state.numOfTries+1,
+      alert:{
+        isActive:true,
+        message:ALERTS.WRONG
+      }
+    })
+    setTimeout(()=>this.setState({alert:false}),1500);
+  }
+  onOkHandler = () => {
+    (this.state.input === this.state.answer) 
+    ? this.onCorrectAnswer()
+    : this.onWrongAnswer();
+  }
+  onDelHandler = () => {
+    (this.state.input===0)
+    ? this.newExercise({})
+    : this.setState({input:Math.floor(this.state.input/10)});
+  }
+  onNumberHandler = (key) => {
+    this.setState({input:this.state.input*10 + parseInt(key)})
+  }
   //buttonpad click handler
   onClickHandler = (e,key) => {
     switch(key){
       case 'ok':
-        //answer is correct
-        if(this.state.input === this.state.answer){
-          this.newExercise({
-            history:[
-              {
-                exercise: `${this.state.num1} ${this.state.mathOperation.sign} ${this.state.num2} = ${this.state.answer}`,
-                numOfTries:this.state.numOfTries + 1
-            }
-            ,...this.state.history],
-            alert:{
-              isActive:true,
-              message:ALERTS.CORRECT
-            }
-          });
-          setTimeout(()=>this.setState({alert:false}),1500);
-        }
-        //answer is wrong
-        else{
-          this.setState({
-            numOfTries:this.state.numOfTries+1,
-            alert:{
-              isActive:true,
-              message:ALERTS.WRONG
-            }
-          })
-          setTimeout(()=>this.setState({alert:false}),1500);
-        }
+        this.onOkHandler();
         break;
-
       case 'del':
-        if(this.state.input===0){
-          this.newExercise({});
-          break;
-        }
-        this.setState({input:Math.floor(this.state.input/10)});
+        this.onDelHandler();
         break;
-      
       default:
-        this.setState({input:this.state.input*10 + parseInt(key)})
+        this.onNumberHandler(key);
     }
+  }
+  onKeyPressHandler = (e) => {
+    console.log(e);
   }
   onStartHandler = () => this.newExercise({started:true});
 
@@ -115,7 +138,7 @@ class Calculator extends Component{
         <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
         <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
         <h2>History:</h2>
-        {this.state.history.map((item,acc) => <h3 key={item.exercise}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
+        {this.state.history.map((item,acc) => <h3 key={acc+1}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
         </>
         :<Button className="start-btn" value="start" onClickHandler={this.onStartHandler}/>}
 
