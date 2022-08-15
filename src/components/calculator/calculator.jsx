@@ -2,9 +2,10 @@ import { Component } from "react";
 import ButtonPad from "../buttonPad/buttonPad";
 import Button from "../button/button";
 import { MATH_OPERATIONS,ALERTS } from "../../utils/utils";
-import MathOpetaionsBar from "../mathOpetaionsBar/mathOpetaionsBar.component";
+import MathOperationsBar from "../mathOperationsBar/mathOperationsBar.component";
 import AccumulatorBar from "../../accumulatorBar/accumulatorBar.component";
 import Alert from "../../alert/alert.component";
+import History from "../../history/history.component";
 
 class Calculator extends Component{
   constructor(props){
@@ -96,9 +97,8 @@ class Calculator extends Component{
     : this.onWrongAnswer();
   }
   onDelHandler = () => {
-    (this.state.input===0)
-    ? this.newExercise({})
-    : this.setState({input:Math.floor(this.state.input/10)});
+    if (this.state.input===0) return;
+    this.setState({input:Math.floor(this.state.input/10)});
   }
   onNumberHandler = (key) => {
     this.setState({input:this.state.input*10 + parseInt(key)})
@@ -121,8 +121,10 @@ class Calculator extends Component{
   }
   onStartHandler = () => this.newExercise({started:true});
 
-  mathOpetaionsBarHandler = (operation) => this.newExercise({mathOperation:operation});
-  accumulatorBarHandler = (acc) => this.newExercise({acc:acc});
+  mathOperationsBarHandler = (operation) => this.newExercise({mathOperation:operation});
+  accumulatorBarHandler = (acc = this.state.acc) => {
+    this.newExercise({acc})
+  };
   
   render(){
     {console.log('render',this.state.answer);}
@@ -131,15 +133,14 @@ class Calculator extends Component{
       {this.state.alert.isActive ? <Alert message={this.state.alert.message}/> : ''}
       <h1>Math Practice</h1>
       {this.state.started ? 
-        <>
-        <h3>{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
-        <MathOpetaionsBar callback={this.mathOpetaionsBarHandler}/>
-        <AccumulatorBar callback={this.accumulatorBarHandler}/>
-        <h2 className="mp-input-heading">{this.state.input?this.state.input:'Enter Your Answer'}</h2>
-        <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
-        <h2>History:</h2>
-        {this.state.history.map((item,acc) => <h3 key={acc+1}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
-        </>
+        <div className="calculator-grid">
+          <h3 className="math-exercise">{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
+          <h2 className="mp-input-heading">{this.state.input?this.state.input:'...'}</h2>
+          <MathOperationsBar callback={this.mathOperationsBarHandler}/>
+          <AccumulatorBar callback={this.accumulatorBarHandler}/>
+          <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
+          <History history={this.state.history} />
+        </div>
         :<Button className="start-btn" value="start" onClickHandler={this.onStartHandler}/>}
 
     </>

@@ -1,11 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  --calculator-primary:#22252D;
+  --calculator-secondary:#2A2D37;
+  --calculator-bar:#363b4e;
+  --calculator-active:#424653;
+  --background:#191924;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Roboto',-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #333;
+  background-color: var(--background);
 }
 
 h1,h2,h3{
@@ -14,18 +26,18 @@ h1,h2,h3{
 }
 
 .mp-input-heading{
-  text-align: center;
-  background-color: rgb(73, 73, 73);
-  max-width: 400px;
-  border-radius: 10px;
   padding: 5px;
-  margin: 0 auto;
+  font-weight: bold;
+  font-size: 2rem;
+  text-align: left;
+  max-width: 400px;
   overflow: hidden;
+  grid-area: input;
 }
 
 .mp-button{
-  padding: 10px 20px;
-  background-color: rgb(36, 36, 36);
+  padding: 10px;
+  background-color: var(--calculator-primary);
   color: #fff;
   border-radius: 10px;
   font-size: 16px;
@@ -36,17 +48,48 @@ h1,h2,h3{
 }
 
 .mp-button:active{
-  background-color: #444;
+  background-color: var(--calculator-active);
+  animation: grow 0.1s;
+}
+@keyframes grow {
+  to{
+    transform: scale(1.1);
+  }
 }
 
-.grid{
+.math-exercise{
+  grid-area: math-exercise;
+  margin-top: 50px;
+  text-align: left;
+  padding-left: 5px;
+}
+.calculator-grid{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-template-rows: auto;
+  grid-template-areas: 
+  "math-exercise math-exercise math-exercise math-exercise"
+  "input input input input"
+  "mathOperationsBar mathOperationsBar mathOperationsBar mathOperationsBar"
+  "button-grid button-grid button-grid accumulatorBar"
+  "history history history history";
+  max-width: 300px;
+  margin: 0 auto;
+  background-color: var(--calculator-primary);
+  border-radius: 20px;
+  padding: 20px 5px;
+  border: 5px solid var(--calculator-secondary);
+  box-shadow: rgba(0, 0, 0, 0.3) 1.95px 1.95px 2.6px;
+}
+.buttonpad-grid{
   padding: 10px;
   display: grid;
   grid-template-columns: repeat(3,1fr);
   row-gap: 10px;
   column-gap: 10px;
-  max-width: 400px;
-  margin: 10px auto;
+  grid-area: button-grid;
+  background-color: var(--calculator-secondary);
+  border-radius: 0 0 0 10px;
 }
 
 .start-btn{
@@ -54,12 +97,43 @@ h1,h2,h3{
   margin: auto;
 }
 
-.mathOpetaionsBar,
-.accumulatorBar{
+.history{
+  grid-area: history;
+  margin-top: 20px;
+}
+
+.mathOperationsBar{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  grid-area: mathOperationsBar;
+  background-color: var(--calculator-secondary);
+  padding: 10px;
+  border-radius: 10px 10px 0 0;
+  margin-top: 20px; 
+}
+
+.mathOperationsBar .mp-button{
+  font-weight: bold;
+  color: rgb(131, 112, 112);
+  padding: 10px 25px;
+  background-color: var(--background);
+}
+
+.accumulatorBar{
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   column-gap: 10px;
-  margin: 10px 0;
+  grid-area: accumulatorBar;
+  background-color: var(--calculator-secondary);
+  padding: 10px;
+  border-radius: 0 0 10px 0;
+}
+
+.accumulatorBar .mp-button{
+  color: rgb(131, 112, 112);
+  background-color: var(--background);
 }
 
 .alert-box{

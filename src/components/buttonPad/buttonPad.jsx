@@ -8,16 +8,12 @@ class ButtonPad extends Component  {
   }
   render(){
     return (
-      <div>
-        <div className="grid">
+        <div className="buttonpad-grid">
         {
-          Keys.map(key=>{
-            if(key==='del' && this.props.input===0) return <Button key="new" value="new" onClickHandler={(e)=>this.props.onClickHandler(e,key)}/>;
-            return <Button key={key} value={key} onClickHandler={(e)=>this.props.onClickHandler(e,key)}/>
-        })
+          Keys.map(key => 
+          <Button key={key} value={key} onClickHandler={(e)=>this.props.onClickHandler(e,key)}/>)
         }
         </div>
-      </div>
     )
   }
   
