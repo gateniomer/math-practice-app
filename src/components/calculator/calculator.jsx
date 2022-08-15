@@ -17,7 +17,6 @@ class Calculator extends Component{
       mathOperation:MATH_OPERATIONS.sum,
       input:0,
       acc:10,
-      started:false,
       history:[],
       numOfTries:0,
       alert: {
@@ -40,6 +39,7 @@ class Calculator extends Component{
         this.onOkHandler();
       }
     });
+    this.newExercise({});
   }
   newExercise(additionalDetails){
     //checks if we changed math operation before calling new exercise
@@ -101,6 +101,7 @@ class Calculator extends Component{
     this.setState({input:Math.floor(this.state.input/10)});
   }
   onNumberHandler = (key) => {
+    if(this.state.input>=1000000) return;
     this.setState({input:this.state.input*10 + parseInt(key)})
   }
   //buttonpad click handler
@@ -127,22 +128,20 @@ class Calculator extends Component{
   };
   
   render(){
-    {console.log('render',this.state.answer);}
+    console.log();
     return(
       <>
       {this.state.alert.isActive ? <Alert message={this.state.alert.message}/> : ''}
-      <h1>Math Practice</h1>
-      {this.state.started ? 
-        <div className="calculator-grid">
-          <h3 className="math-exercise">{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
-          <h2 className="mp-input-heading">{this.state.input?this.state.input:'...'}</h2>
-          <MathOperationsBar callback={this.mathOperationsBarHandler}/>
-          <AccumulatorBar callback={this.accumulatorBarHandler}/>
-          <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
-          <History history={this.state.history} />
-        </div>
-        :<Button className="start-btn" value="start" onClickHandler={this.onStartHandler}/>}
-
+      <h1 style={{"marginTop":"20px"}}>Math Practice PWA </h1>
+      <h3 style={{"marginBottom":"20px"}}>math practice made simple 🤓</h3>
+      <div className="calculator-grid">
+        <h3 className="math-exercise">{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
+        <h2 className="mp-input-heading">{this.state.input ? Array.from(this.state.input.toString()).map((char,i)=><span key={i}>{char}</span>) : '...'}</h2>
+        <MathOperationsBar callback={this.mathOperationsBarHandler}/>
+        <AccumulatorBar callback={this.accumulatorBarHandler}/>
+        <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
+      </div>
+      <History history={this.state.history} />
     </>
     )
   }
