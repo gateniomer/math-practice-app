@@ -3,9 +3,9 @@ import ButtonPad from "../buttonPad/buttonPad";
 import Button from "../button/button";
 import { MATH_OPERATIONS,ALERTS } from "../../utils/utils";
 import MathOperationsBar from "../mathOperationsBar/mathOperationsBar.component";
-import AccumulatorBar from "../../accumulatorBar/accumulatorBar.component";
-import Alert from "../../alert/alert.component";
-import History from "../../history/history.component";
+import AccumulatorBar from "../accumulatorBar/accumulatorBar.component";
+import Alert from "../alert/alert.component";
+import History from "../history/history.component";
 
 class Calculator extends Component{
   constructor(props){
