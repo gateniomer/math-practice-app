@@ -89,12 +89,12 @@ h1,h2,h3{
   "button-grid button-grid button-grid accumulatorBar"
   "history history history history";
   max-width: 300px;
-  margin: 0 auto;
+  margin: 20px auto 0 auto;
   background-color: var(--calculator-primary);
   border-radius: 20px;
   padding: 20px 5px;
   border: 5px solid var(--calculator-secondary);
-  box-shadow: rgba(0, 0, 0, 0.3) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .buttonpad-grid{
   padding: 10px;
@@ -115,7 +115,75 @@ h1,h2,h3{
 .history{
   grid-area: history;
   margin-top: 20px;
+  max-width: 300px;
+  margin: 20px auto;
+  background-color: var(--calculator-primary);
+  border-radius: 10px;
+  padding: 20px;
+  max-height: 150px;
+  overflow: auto;
+  animation: show-history 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
+.history h3{
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.history span{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  margin-bottom: 10px;
+  animation: show-history 0.3s ease-in-out forwards;
+}
+.history span .acc{
+  display: inline;
+  font-weight: bold;
+  background-color: var(--calculator-active);
+  border-radius: 50%;
+  width: 2rem;
+  line-height: 2rem;
+  margin: auto 0;
+  text-align: center;
+  border: solid 3px var(--calculator-bar);
+}
+
+.history span .num-of-tries{
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: inline;
+  background-color: var(--calculator-bar);
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: auto 0;
+}
+
+.history::-webkit-scrollbar {
+  width: 12px;
+}
+.history::-webkit-scrollbar-track {
+  background: var(--calculator-secondary);
+  border-radius: 0px 20px 20px 0;
+}
+.history::-webkit-scrollbar-thumb {
+  background-color: var(--calculator-bar);
+  border-radius: 0px 20px 20px 0;
+}
+
+@keyframes show-history {
+  from{
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
+
 
 .mathOperationsBar{
   display: flex;
@@ -189,4 +257,26 @@ h1,h2,h3{
     opacity: 0;
     transform: translate(-50%,-50%) scale(1);
   }
+}
+
+.social-bar{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.social-bar p{
+  font-style: italic;
+  font-size: 0.8rem;
+}
+.social-bar a{
+  color: white;
+  font-size: 1.5rem;
+  margin: 5px;
+}
+.social-bar img{
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
 }

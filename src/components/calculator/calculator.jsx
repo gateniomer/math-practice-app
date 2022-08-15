@@ -30,12 +30,16 @@ class Calculator extends Component{
 
   componentDidMount(){
     window.addEventListener('keydown',e=>{
-      if(isFinite(e.key) && e.code !== 'Space')
+      if(isFinite(e.key) && e.code !== 'Space'){
+        e.preventDefault()
         this.onNumberHandler(e.key);
+      }
       if(e.key==='Backspace'){
+        e.preventDefault()
         this.onDelHandler();
       }
       if(e.key === 'Enter'){
+        e.preventDefault()
         this.onOkHandler();
       }
     });
@@ -132,8 +136,6 @@ class Calculator extends Component{
     return(
       <>
       {this.state.alert.isActive ? <Alert message={this.state.alert.message}/> : ''}
-      <h1 style={{"marginTop":"20px"}}>Math Practice PWA </h1>
-      <h3 style={{"marginBottom":"20px"}}>math practice made simple 🤓</h3>
       <div className="calculator-grid">
         <h3 className="math-exercise">{Math.max(this.state.num1,this.state.num2)} {this.state.mathOperation.sign} {Math.min(this.state.num1,this.state.num2)} = ?</h3>
         <h2 className="mp-input-heading">{this.state.input ? Array.from(this.state.input.toString()).map((char,i)=><span key={i}>{char}</span>) : '...'}</h2>
@@ -141,7 +143,7 @@ class Calculator extends Component{
         <AccumulatorBar callback={this.accumulatorBarHandler}/>
         <ButtonPad input={this.state.input} onClickHandler={this.onClickHandler}/>
       </div>
-      <History history={this.state.history} />
+      {(this.state.history.length>0)? <History history={this.state.history} /> : ""}
     </>
     )
   }

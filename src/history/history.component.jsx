@@ -1,8 +1,9 @@
 const History = ({history}) => {
+  const historyReversed = history.slice().reverse();
   return (
   <div className="history">
-    <h2>History:</h2>
-    {history.map((item,acc) => <h3 key={acc+1}>[{acc+1}] {item.exercise} | {item.numOfTries} trys</h3>)}
+    <h3>History:</h3>
+    {historyReversed.map((item,acc) => <span key={acc}><span className="acc">{acc+1}</span> {item.exercise} <span className="num-of-tries">{item.numOfTries} trys</span></span>).reverse()}
   </div>
   )
 }
